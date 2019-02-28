@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -76,7 +77,7 @@ public class Main {
 					System.out.println("please enter correct name for file");
 					pathRead = sc.next();
 				}
-				FileReader reader = new FileReader(pathRead);
+				DataInputStream reader = new DataInputStream(new FileInputStream(pathRead));
 				int current;
 				String temp = "";
 				System.out.println("please enter path to outputfile");
@@ -85,11 +86,12 @@ public class Main {
 				while (!Files.exists(path)) {
 					pathWrite = sc.next();
 				}
+				Byte cha;
 				BufferedOutputStream writer = new BufferedOutputStream(new FileOutputStream(pathWrite));
 				long start = System.currentTimeMillis();
-				while ((current = reader.read()) != -1) {
-					Byte sy = ((Byte) (Character.toString((char) current).getBytes()[0]));
-					int t = sy & 0xFF;
+				while (reader.available() > 0) {
+					cha = reader.readByte();
+					int t = cha & 0xFF;
 					temp = temp + Character.toString((char) t);
 					if (map.get(temp) == null && temp.equals("") == false) {
 						map.put(temp, map.size() + 1);
